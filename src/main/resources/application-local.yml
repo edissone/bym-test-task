@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: seller-service
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bym-storage
+    username: bmUSER
+    password: bmPWD!
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.yml
+    drop-first: false
+    enabled: true
+  main:
+    banner-mode: off
+  elasticsearch:
+    url: "localhost:9200"
+
+server:
+  servlet:
+    context-path: /api
