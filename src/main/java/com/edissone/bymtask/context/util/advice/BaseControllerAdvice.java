@@ -16,7 +16,7 @@ public abstract class BaseControllerAdvice {
         return ErrorMessage.builder()
                 .message(exception.getMessage())
                 .code(status.value())
-                .path(request.getServletPath())
+                .path(request.getPathInfo())
                 .exceptionType(exceptionType)
                 .timestamp(LocalDateTime.now())
                 .build();

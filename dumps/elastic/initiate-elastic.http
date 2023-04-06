@@ -1,0 +1,66 @@
+POST http://localhost:9201/orders/_doc/7a314b8c-5f55-4c8a-b4a7-f77b50b3940d
+Content-Type: application/json
+
+{
+    "order_amount": 1160.0,
+    "order_items": [
+      {
+        "product_price": 320.0,
+        "product_id": 1,
+        "product_sku": "JKDSHNKN001",
+        "product_name": "Jack Daniels 1L",
+        "order_quantity": 2
+      },
+      {
+        "product_price": 10.0,
+        "product_id": 8,
+        "product_sku": "MRSHUKR001",
+        "product_name": "Morshynska 0.5L",
+        "order_quantity": 42
+      },
+      {
+        "product_price": 10.0,
+        "product_id": 12,
+        "product_sku": "PSCLPEP002",
+        "product_name": "Pepsi Cola 0.5L",
+        "order_quantity": 10
+      }
+    ],
+    "created_at": "2023-04-06 13:04:57",
+    "order_id": "7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+    "updated_at": "2023-04-06 13:04:57"
+  }
+
+###
+POST http://localhost:9201/orders/_doc/facc105e-f645-4513-82a7-5da352100a14
+Content-Type: application/json
+
+  {
+      "order_amount": 4280.0,
+      "order_items": [
+        {
+          "product_price": 240.0,
+          "product_id": 2,
+          "product_sku": "JKDSHNKN002",
+          "product_name": "Jack Daniels 0.75L",
+          "order_quantity": 4
+        },
+        {
+          "product_price": 160.0,
+          "product_id": 3,
+          "product_sku": "JKDSHNKN003",
+          "product_name": "Jack Daniels 0.5L",
+          "order_quantity": 20
+        },
+        {
+          "product_price": 20.0,
+          "product_id": 11,
+          "product_sku": "PSCLPEP001",
+          "product_name": "Pepsi Cola 1L",
+          "order_quantity": 6
+        }
+      ],
+      "created_at": "2023-04-06 13:04:59",
+      "order_id": "facc105e-f645-4513-82a7-5da352100a14",
+      "updated_at": "2023-04-06 13:04:59"
+    }

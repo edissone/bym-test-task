@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: initial-1
+      author: app
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: category_id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: category_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValue: NOW()
+
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: product_id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: product_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_price
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_sku
+                  type: VARCHAR(15)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: product_category_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    references: categories(category_id)
+                    foreignKeyName: fk_product_category
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValue: NOW()
+
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: order_id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: order_amount
+                  type: DOUBLE PRECISION
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_items
+                  type: JSONB
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValue: NOW()
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValue: NOW()
+  - changeSet:
+      id: insert-data
+      author: app
+      changes:
+        - sqlFile:
+            path: db/changelog/insert-data.sql

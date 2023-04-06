@@ -1,0 +1,469 @@
+[
+  {
+    "test": "success-create-order",
+    "data": {
+      "given": {
+        "order_items": [
+          {
+            "product_id": 2,
+            "order_quantity": 4
+          },
+          {
+            "product_id": 10,
+            "order_quantity": 10
+          },
+          {
+            "product_id": 5,
+            "order_quantity": 12
+          }
+        ]
+      },
+      "expect": {
+        "order_amount": 3590.0,
+        "order_items": [
+          {
+            "product_id": 2,
+            "product_name": "Jack Daniels 0.75L",
+            "product_sku": "JKDSHNKN002",
+            "product_price": 240.0,
+            "order_quantity": 4
+          },
+          {
+            "product_id": 5,
+            "product_name": "Jim Beam 0.75L",
+            "product_sku": "JMBMHNKN002",
+            "product_price": 210.0,
+            "order_quantity": 12
+          },
+          {
+            "product_id": 10,
+            "product_name": "Coca Cola 0.5L",
+            "product_sku": "CKCLPEP002",
+            "product_price": 11.0,
+            "order_quantity": 10
+          }
+        ]
+      }
+    }
+  },
+  {
+    "test": "create-failed-nested-products-not-found",
+    "data": {
+      "given": {
+        "order_items": [
+          {
+            "product_id": 100,
+            "order_quantity": 4
+          },
+          {
+            "product_id": 110,
+            "order_quantity": 10
+          },
+          {
+            "product_id": 515,
+            "order_quantity": 12
+          }
+        ]
+      },
+      "expect_error": {
+        "message": "Product with id=[515, 100, 110] not found",
+        "code": 404,
+        "path": "/orders",
+        "exception_type": "PRODUCT_NOT_FOUND"
+      }
+    }
+  },
+  {
+    "test": "success-get-order",
+    "data": {
+      "given_params": "?id=7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+      "expect": {
+        "order_id": "7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+        "order_amount": 1160.0,
+        "order_items": [
+          {
+            "product_id": 1,
+            "product_name": "Jack Daniels 1L",
+            "product_sku": "JKDSHNKN001",
+            "product_price": 320.0,
+            "order_quantity": 2
+          },
+          {
+            "product_id": 8,
+            "product_name": "Morshynska 0.5L",
+            "product_sku": "MRSHUKR001",
+            "product_price": 10.0,
+            "order_quantity": 42
+          },
+          {
+            "product_id": 12,
+            "product_name": "Pepsi Cola 0.5L",
+            "product_sku": "PSCLPEP002",
+            "product_price": 10.0,
+            "order_quantity": 10
+          }
+        ],
+        "created_at": "2023-04-06 13:35:57",
+        "updated_at": "2023-04-06 13:35:57"
+      }
+    }
+  },
+  {
+    "test": "get-failed-not-found",
+    "data": {
+      "given_params": "?id=7a314b8c-5f55-4c8a-b4a7-000000000000",
+      "expect_error": {
+        "message": "Order with id=7a314b8c-5f55-4c8a-b4a7-000000000000 not found",
+        "code": 404,
+        "path": "/orders",
+        "exception_type": "ORDER_NOT_FOUND"
+      }
+    }
+  },
+  {
+    "test": "success-update-order",
+    "data": {
+      "given_params": "/7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+      "given": {
+        "order_items": [
+          {
+            "product_id": 7,
+            "order_quantity": 1
+          }
+        ]
+      },
+      "expect": {
+        "order_id": "7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+        "order_amount": 200.0,
+        "order_items": [
+          {
+            "product_id": 7,
+            "product_name": "Zubrowka 1L",
+            "product_sku": "ZBRPLN001",
+            "product_price": 200.0,
+            "order_quantity": 1
+          }
+        ],
+        "created_at": "2023-04-06 13:35:57",
+        "updated_at": "2023-04-06 16:47:14"
+      }
+    }
+  },
+  {
+    "test": "update-failed-one-of-nested-products-not-found",
+    "data": {
+      "given_params": "/7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+      "given": {
+        "order_items": [
+          {
+            "product_id": 722,
+            "order_quantity": 1
+          },
+          {
+            "product_id": 7,
+            "order_quantity": 1
+          }
+        ]
+      },
+      "expect_error": {
+        "message": "Product with id=[722] not found",
+        "code": 404,
+        "path": "/orders/7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+        "exception_type": "PRODUCT_NOT_FOUND"
+      }
+    }
+  },
+  {
+    "test": "update-failed-order-not-found",
+    "data": {
+      "given_params": "/7a314b8c-5f55-4c8a-b4a7-f77b50b394ss",
+      "given": {
+        "order_items": [
+          {
+            "product_id": 7,
+            "order_quantity": 1
+          }
+        ]
+      },
+      "expect_error": {
+        "message": "Order with id=7a314b8c-5f55-4c8a-b4a7-f77b50b394ss not found",
+        "code": 404,
+        "path": "/orders/7a314b8c-5f55-4c8a-b4a7-f77b50b394ss",
+        "exception_type": "ORDER_NOT_FOUND"
+      }
+    }
+  },
+  {
+    "test": "success-delete-order",
+    "data": {
+      "given_params": "?id=5a214b8c-5f55-4c8a-b4a7-f77b50b3940a",
+      "expect": {
+        "order_id": "5a214b8c-5f55-4c8a-b4a7-f77b50b3940a",
+        "order_amount": 4280.0,
+        "order_items": [
+          {
+            "product_id": 2,
+            "product_name": "Jack Daniels 0.75L",
+            "product_sku": "JKDSHNKN002",
+            "product_price": 240.0,
+            "order_quantity": 4
+          },
+          {
+            "product_id": 3,
+            "product_name": "Jack Daniels 0.5L",
+            "product_sku": "JKDSHNKN003",
+            "product_price": 160.0,
+            "order_quantity": 20
+          },
+          {
+            "product_id": 11,
+            "product_name": "Pepsi Cola 1L",
+            "product_sku": "PSCLPEP001",
+            "product_price": 20.0,
+            "order_quantity": 6
+          }
+        ],
+        "created_at": "2023-04-06 13:35:59",
+        "updated_at": "2023-04-06 13:35:59"
+      }
+    }
+  },
+  {
+    "test": "delete-failed-not-found",
+    "data": {
+      "given_params": "?id=779d7a64-fefc-49db-8ab8-0107d919b900",
+      "expect_error": {
+        "message": "Order with id=779d7a64-fefc-49db-8ab8-0107d919b900 not found",
+        "code": 404,
+        "path": "/orders",
+        "exception_type": "ORDER_NOT_FOUND"
+      }
+    }
+  },
+  {
+    "test": "success-get-all",
+    "data": {
+      "given_params": "/all",
+      "expect": [
+        {
+          "order_id": "7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+          "order_amount": 1160.0,
+          "order_items": [
+            {
+              "product_id": 1,
+              "product_name": "Jack Daniels 1L",
+              "product_sku": "JKDSHNKN001",
+              "product_price": 320.0,
+              "order_quantity": 2
+            },
+            {
+              "product_id": 8,
+              "product_name": "Morshynska 0.5L",
+              "product_sku": "MRSHUKR001",
+              "product_price": 10.0,
+              "order_quantity": 42
+            },
+            {
+              "product_id": 12,
+              "product_name": "Pepsi Cola 0.5L",
+              "product_sku": "PSCLPEP002",
+              "product_price": 10.0,
+              "order_quantity": 10
+            }
+          ],
+          "created_at": "2023-04-06 13:35:57",
+          "updated_at": "2023-04-06 13:35:57"
+        },
+        {
+          "order_id": "5a214b8c-5f55-4c8a-b4a7-f77b50b3940a",
+          "order_amount": 4280.0,
+          "order_items": [
+            {
+              "product_id": 2,
+              "product_name": "Jack Daniels 0.75L",
+              "product_sku": "JKDSHNKN002",
+              "product_price": 240.0,
+              "order_quantity": 4
+            },
+            {
+              "product_id": 3,
+              "product_name": "Jack Daniels 0.5L",
+              "product_sku": "JKDSHNKN003",
+              "product_price": 160.0,
+              "order_quantity": 20
+            },
+            {
+              "product_id": 11,
+              "product_name": "Pepsi Cola 1L",
+              "product_sku": "PSCLPEP001",
+              "product_price": 20.0,
+              "order_quantity": 6
+            }
+          ],
+          "created_at": "2023-04-06 13:35:59",
+          "updated_at": "2023-04-06 13:35:59"
+        }
+      ]
+    }
+  },
+  {
+    "test": "success-search-total-amount-gt",
+    "data": {
+      "given_params": "/search?query_type=total-amount-gt&value=1500",
+      "expect": {
+        "value": "1500",
+        "results": {
+          "content": [
+            {
+              "order_id": "5a214b8c-5f55-4c8a-b4a7-f77b50b3940a",
+              "order_amount": 4280.0,
+              "order_items": [
+                {
+                  "product_id": 2,
+                  "product_name": "Jack Daniels 0.75L",
+                  "product_sku": "JKDSHNKN002",
+                  "product_price": 240.0,
+                  "order_quantity": 4
+                },
+                {
+                  "product_id": 3,
+                  "product_name": "Jack Daniels 0.5L",
+                  "product_sku": "JKDSHNKN003",
+                  "product_price": 160.0,
+                  "order_quantity": 20
+                },
+                {
+                  "product_id": 11,
+                  "product_name": "Pepsi Cola 1L",
+                  "product_sku": "PSCLPEP001",
+                  "product_price": 20.0,
+                  "order_quantity": 6
+                }
+              ],
+              "created_at": "2023-04-06 13:04:59",
+              "updated_at": "2023-04-06 13:04:59"
+            }
+          ],
+          "pageable": {
+            "sort": {
+              "empty": true,
+              "sorted": false,
+              "unsorted": true
+            },
+            "offset": 0,
+            "pageNumber": 0,
+            "pageSize": 20,
+            "paged": true,
+            "unpaged": false
+          },
+          "totalPages": 1,
+          "totalElements": 1,
+          "last": true,
+          "size": 20,
+          "number": 0,
+          "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+          },
+          "numberOfElements": 1,
+          "first": true,
+          "empty": false
+        },
+        "query_type": "total-amount-gt"
+      }
+    }
+  },
+  {
+    "test": "success-search-item-product-name-like",
+    "data": {
+      "given_params": "/search?query_type=item-product-name-like&value=Mo",
+      "expect": {
+        "value": "Mo",
+        "results": {
+          "content": [
+            {
+              "order_id": "7a314b8c-5f55-4c8a-b4a7-f77b50b3940d",
+              "order_amount": 1160.0,
+              "order_items": [
+                {
+                  "product_id": 1,
+                  "product_name": "Jack Daniels 1L",
+                  "product_sku": "JKDSHNKN001",
+                  "product_price": 320.0,
+                  "order_quantity": 2
+                },
+                {
+                  "product_id": 8,
+                  "product_name": "Morshynska 0.5L",
+                  "product_sku": "MRSHUKR001",
+                  "product_price": 10.0,
+                  "order_quantity": 42
+                },
+                {
+                  "product_id": 12,
+                  "product_name": "Pepsi Cola 0.5L",
+                  "product_sku": "PSCLPEP002",
+                  "product_price": 10.0,
+                  "order_quantity": 10
+                }
+              ],
+              "created_at": "2023-04-06 13:04:57",
+              "updated_at": "2023-04-06 13:04:57"
+            }
+          ],
+          "pageable": {
+            "sort": {
+              "empty": true,
+              "sorted": false,
+              "unsorted": true
+            },
+            "offset": 0,
+            "pageNumber": 0,
+            "pageSize": 20,
+            "paged": true,
+            "unpaged": false
+          },
+          "totalPages": 1,
+          "totalElements": 1,
+          "last": true,
+          "size": 20,
+          "number": 0,
+          "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+          },
+          "numberOfElements": 1,
+          "first": true,
+          "empty": false
+        },
+        "query_type": "item-product-name-like"
+      }
+    }
+  },
+  {
+    "test": "search-failed-handler-not-implemented",
+    "data": {
+      "given_params": "/search?query_type=item--like&value=sxss",
+      "expect_error": {
+        "message": "Handler for [search item--like] not implemented",
+        "code": 501,
+        "path": "/orders/search",
+        "exception_type": "HANDLER_NOT_IMPLEMENTED"
+      }
+    }
+  },
+  {
+    "test": "report-failed-handler-not-implemented",
+    "data": {
+      "given_params": "/report?report_type=item",
+      "expect_error": {
+        "message": "Handler for [report item] not implemented",
+        "code": 501,
+        "path": "/orders/report",
+        "exception_type": "HANDLER_NOT_IMPLEMENTED"
+      }
+    }
+  }
+]

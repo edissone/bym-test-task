@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  test-bymtask-storage:
+    container_name: test-bym-storage
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_DB: "bym-storage"
+      POSTGRES_USER: "bmUSER"
+      POSTGRES_PASSWORD: "bmPWD!"
+    hostname: "bym-storage"
+    ports:
+      - "5433:5432"
+    networks:
+      - test-elastic
+
+  test-bymtask-elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    container_name: test-bymtask-elastic
+    restart: always
+    environment:
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    hostname: test-bym-elastic
+    ports:
+      - "9201:9200"
+    networks:
+      - test-elastic
+
+#  test-bymtask-logstash:
+#    build:
+#      context: logstash
+#      dockerfile: Dockerfile
+#    container_name: bymtask-logstash
+#    volumes:
+#      - ./logstash/config/test.conf:/usr/share/logstash/config/logstash.conf
+#    ports:
+#      - "9601:9600"
+#    depends_on:
+#      - test-bymtask-elastic
+#      - test-bymtask-storage
+#    command: logstash -f /usr/share/logstash/config/logstash.conf
+#    networks:
+#      - test-elastic
+
+networks:
+  test-elastic:
