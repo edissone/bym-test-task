@@ -1,3 +1,12 @@
+## Startup notes
+### Testing
+- For running API tests is required to follow step-by-step:
+1. `docker compose -f compose-test.yml up -d` - startup test docker compose environment 
+2. Once elasticsearch cluster in container has been started - perform queries from `/dumps/elastic/initiate-elastic.http`
+3. Run test-class
+
+All data used for tests is present in `/src/test/resources/data/test-data.json`
+
 ## Task description
 
 1. Create a Spring-boot service application with REST CRUD methods for the following entities: Category, Product, Order

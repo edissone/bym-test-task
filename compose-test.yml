@@ -29,21 +29,5 @@ services:
     networks:
       - test-elastic
 
-#  test-bymtask-logstash:
-#    build:
-#      context: logstash
-#      dockerfile: Dockerfile
-#    container_name: bymtask-logstash
-#    volumes:
-#      - ./logstash/config/test.conf:/usr/share/logstash/config/logstash.conf
-#    ports:
-#      - "9601:9600"
-#    depends_on:
-#      - test-bymtask-elastic
-#      - test-bymtask-storage
-#    command: logstash -f /usr/share/logstash/config/logstash.conf
-#    networks:
-#      - test-elastic
-
 networks:
   test-elastic:
