@@ -14,8 +14,9 @@ public enum ExceptionType {
     ORDER_NOT_FOUND("Order with %s not found"),
 
     HANDLER_NOT_IMPLEMENTED("Handler for [%s] not implemented"),
-    HANDLER_TYPE_UNRECOGNIZED("Unable to recognize [%s] handler type");
+    HANDLER_TYPE_UNRECOGNIZED("Unable to recognize [%s] handler type"),
 
+    INTERNAL_ERROR("Internal server error: %s");
 
     private final String messageTemplate;
 

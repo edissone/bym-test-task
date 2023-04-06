@@ -18,6 +18,11 @@ spring:
   elasticsearch:
     url: "localhost:9200"
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  override-with-generic-response: false
+
 server:
   servlet:
     context-path: /api

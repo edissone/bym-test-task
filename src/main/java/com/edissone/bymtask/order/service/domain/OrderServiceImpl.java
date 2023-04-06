@@ -1,8 +1,8 @@
 package com.edissone.bymtask.order.service.domain;
 
 import com.edissone.bymtask.order.dao.domain.model.OrderEntity;
-import com.edissone.bymtask.order.dao.embedded.model.OrderItem;
 import com.edissone.bymtask.order.dao.domain.repository.OrderRepository;
+import com.edissone.bymtask.order.dao.embedded.model.OrderItem;
 import com.edissone.bymtask.order.dto.OrderDTO;
 import com.edissone.bymtask.order.exception.OrderNotFoundException;
 import com.edissone.bymtask.product.dao.model.ProductEntity;
@@ -37,14 +37,7 @@ public class OrderServiceImpl implements OrderService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now());
 
-        final var amount = new AtomicReference<>(0.00);
-        final var idToQuantity = extractOrderIdToQuantity(dto.getItems().stream());
-
-        products.stream()
-                .map(mapOrderItem(idToQuantity))
-                .forEach(insertAndCalculate(amount, insertable));
-
-        insertable.amount(amount.get());
+        updateOrderItems(dto, products, insertable);
 
         final var saved = repository.save(insertable.build());
         log.info("order created: {}", saved);
@@ -65,14 +58,7 @@ public class OrderServiceImpl implements OrderService {
                 .createdAt(exist.getCreatedAt())
                 .updatedAt(LocalDateTime.now());
 
-        if (products != null && !products.isEmpty()) {
-            final var amount = new AtomicReference<>(0.00);
-            final var idToQuantity = extractOrderIdToQuantity(dto.getItems().stream());
-            products.stream()
-                    .map(mapOrderItem(idToQuantity))
-                    .forEach(insertAndCalculate(amount, updatable));
-            updatable.amount(amount.get());
-        }
+        updateOrderItems(dto, products, updatable);
 
         final var saved = repository.save(updatable.build());
         log.info("order updated: {}\n-> {}", exist, saved);
@@ -90,6 +76,15 @@ public class OrderServiceImpl implements OrderService {
         repository.delete(exist);
         log.info("delete order: {}", exist);
         return exist;
+    }
+
+    private void updateOrderItems(OrderDTO dto, List<ProductEntity> products, OrderEntity.OrderEntityBuilder updatable) {
+        final var amount = new AtomicReference<>(0.00);
+        final var idToQuantity = extractOrderIdToQuantity(dto.getItems().stream());
+        products.stream()
+                .map(mapOrderItem(idToQuantity))
+                .forEach(insertAndCalculate(amount, updatable));
+        updatable.amount(amount.get());
     }
 
     private Map<Long, Integer> extractOrderIdToQuantity(Stream<OrderDTO.OrderItemDTO> itemStream) {

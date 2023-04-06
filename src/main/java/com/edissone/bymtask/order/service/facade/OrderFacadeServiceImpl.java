@@ -22,10 +22,10 @@ import java.util.Map;
 
 @Service
 public class OrderFacadeServiceImpl implements OrderFacadeService {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
     private final ProductService productService;
     private final OrderService orderService;
     private final OrderElasticService elasticService;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
 
     @Autowired
     public OrderFacadeServiceImpl(ProductService productService, OrderService orderService, OrderElasticService elasticService) {
@@ -36,7 +36,8 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
 
     @Override
     public OrderEntity create(OrderDTO dto) {
-        final var products = productService.findAllByIdSet(dto.extractItemIDs());
+        List<ProductEntity> products;
+        products = productService.findAllByIdSet(dto.extractItemIDs());
         return orderService.create(dto, products);
     }
 
@@ -47,12 +48,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
 
     @Override
     public OrderEntity update(String id, OrderDTO dto) {
-        List<ProductEntity> products;
-        try {
-            products = productService.findAllByIdSet(dto.extractItemIDs());
-        } catch (ProductNotFoundException ex) {
-            products = null;
-        }
+        final var products = productService.findAllByIdSet(dto.extractItemIDs());
         return orderService.update(id, dto, products);
     }
 

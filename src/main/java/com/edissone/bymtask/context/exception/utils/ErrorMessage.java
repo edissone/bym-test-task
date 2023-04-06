@@ -16,6 +16,6 @@ public class ErrorMessage {
     private String path;
     @JsonProperty("exception_type")
     private String exceptionType;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-ddThh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss")
     private LocalDateTime timestamp;
 }
